@@ -1,0 +1,427 @@
+SQL
+--	=====================================================	--
+-- remove random string from email:
+RPAD(email,IF( (INSTR(email, '_SPQWsa1l23szA_' ) )>0,INSTR(email, '_SPQWsa1l23szA_' )-1, CHARACTER_LENGTH(email) ) ,' ') AS email
+--	=====================================================	--
+
+-- data for the last month
+--	=====================================================	--
+WHERE DATE(o.order_date) BETWEEN SUBDATE(CURDATE(), INTERVAL 1 MONTH) AND NOW()
+--	=====================================================	--
+
+-- Find content for a page
+--	=====================================================	--
+SELECT * FROM page_content WHERE page_instance_id IN
+		(SELECT id FROM page_instance WHERE page_id IN
+				(SELECT id FROM page WHERE page_key ='VM_ORDER_CONFIRMATION_EMAIL') AND status='PUBLISHED');
+--	=====================================================	--
+
+-- Generic Form handler
+--	=====================================================	--
+SELECT fs.id, fs.name, fs.customer_id, fs.submitted_dts,
+fsf1.`value` name,
+fsf2.`value` address,
+fsf3.`value` email,
+fsf4.`value` jacket,
+fsf5.`value` 'opt-snow',
+fsf6.`value` 'opt-haglofs'
+
+FROM form_submission fs
+LEFT OUTER JOIN form_submission_field fsf1 ON fs.id = fsf1.form_submission_id AND fsf1.name = 'name'
+LEFT OUTER JOIN form_submission_field fsf2 ON fs.id = fsf2.form_submission_id AND fsf2.name = 'address'
+LEFT OUTER JOIN form_submission_field fsf3 ON fs.id = fsf3.form_submission_id AND fsf3.name = 'email'
+LEFT OUTER JOIN form_submission_field fsf4 ON fs.id = fsf4.form_submission_id AND fsf4.name = 'jacket'
+LEFT OUTER JOIN form_submission_field fsf5 ON fs.id = fsf5.form_submission_id AND fsf5.name = 'opt-snow'
+LEFT OUTER JOIN form_submission_field fsf6 ON fs.id = fsf6.form_submission_id AND fsf6.name = 'opt-haglofs'
+
+WHERE fs.name = 'haglofs-comp'
+
+-- http://www.snowandrock.com/competition-haglofs/content/fcp-content
+--	=====================================================	--
+
+-- null or black
+--	=====================================================	--
+WHERE (card_type is null or length(card_type)=0);
+
+
+-- Contains a linespace/carriage return
+--	=====================================================	--
+SELECT a.search_prd_id, a.pa_id, a.value FROM attribute_value a WHERE pa_id ='MATERIAL' AND (a.value REGEXP '\n' OR a.value REGEXP '\r' OR a.value REGEXP '\n\r' OR a.value REGEXP 'r\n')
+
+
+-- javascript to add marketing preference via ajax
+--	=====================================================	-- 
+<script>
+//TOPGRADE-3491
+$(document).ready(function(){
+	if ($('#customer_marketing').length > 0) {
+		$.ajax({
+			type: "GET",
+			url: "/pws/secure/ManageAccount.ice?layout=loginregister.layout"
+		})
+		.done(function(data) {
+			$('#customer_marketing').find('fieldset').find('.element:nth(0)').html($(data).find('label[for=customerMarketing_1]'));
+			$('#customer_marketing').find('fieldset').find('.element:nth(1)').html($(data).find('label[for=customerMarketing_2]'));
+		});		
+	}
+});
+</script>
+
+-- Basic functions
+
+      <script type="text/javascript">
+         function sayHello()
+         {
+            document.write ("Hello there!");
+         }
+      </script>
+		<input type="button" onclick="sayHello()" value="Say Hello">
+	  
+	 -- OR
+ <script type="text/javascript">
+         function sayHello(name, age)
+         {
+            document.write (name + " is " + age + " years old.");
+         }
+</script>
+         <input type="button" onclick="sayHello('Zara', 7)" value="Say Hello">
+
+
+/* Replace "Percent Off" with "% Off" in text, so that URL's don't get broken with % sign.*/
+	replaceIds: function () {
+		var replace_ids = ['crumbs', 'navigation', 'sub_navigation', 'subcategories'],
+			i,
+			replacePercentage = function (i){
+				$('#' + replace_ids[i]).find('a:contains(Percent Off), div > li.last:contains(Percent Off)').each(function(){
+					$(this).text($(this).text().replace(/Percent Off/g,"% Off"));
+				});
+			};
+
+		for (i = 0; i < replace_ids.length; i++) {
+			if (replace_ids[i] !== 0) {
+				replacePercentage(i);
+			}
+		}
+	}
+	
+-- Find and replace
+$(document).ready(function(){
+    $('#storesRegion').find('option[value$=Tyrone]').val('Tyrone Ireland'); // adds Ireland to Tyrone dropdown value
+    $('#storesRegion').find('option[value$=Derry]').val('Derry Ireland'); // adds Ireland to Detty dropdown value
+});
+
+-- replace text
+var replace_ids = ['page'];
+for (var i = 0; i < replace_ids.length; i++) {
+if (replace_ids[i] != 0) {
+if($('#' + replace_ids[i]).length > 0) { $('#' + replace_ids[i]).html($('#' + replace_ids[i]).html().replace(/%/g,"")); }
+}
+}
+
+-- jquery replace all on page
+$(document).ready(function(){
+    $("body").html($("body").html().replace(/Nike/g,"levi's"));
+});
+
+
+-- find on page then replace
+$(document).ready(function(){
+if($(".field_message_inline").length > 0) {
+    $(".field_message_inline").html($(".field_message_inline").html().replace(/Lorem Ipsum/g,"and conditions"));
+}
+});
+
+-- prevent adding characters: - VIYELLA-893
+$(document).ready(function() {
+    $('input#firstName, input#firstnamefield, input#lastName, input#lastnamefield').keyup(function() {
+        var v = $(this).val();
+        if (v.indexOf(',') !== -1) {
+            v = v.substring(0, v.length - 1);
+            $(this).val(v);
+            alert('Sorry "Commas" are unavailable in this feild');
+        }
+    })
+});
+
+
+-- find somethign on page, then add code after something else
+$('#create_address_form fieldset').find('input[value$=US]').insertAfter( $( "#postcode_element" ) ).after( '<div id="state_element" class="element"><label');
+
+-- JavaScript to add attribute
+$('input#j_username').prop('autocomplete','on');
+$('input#j_password').prop('autocomplete','on');
+
+-- JavaScript to remove attribute
+$('input#j_username').removeAttr('autocomplete');
+$('input#j_password').removeAttr('autocomplete');
+
+-- pull from ajax, 
+/* CLAIRESNA-1054 */
+$(document).ajaxComplete(function(event, xhr, settings) {
+	if (settings.url.indexOf("ssnJavaScript.jsp") !== -1) {
+		$('.mb_sum').find('.price').text($('#mini_basket_popup').find('.basket_totals').find('dd').text());
+	}
+});
+
+-- Take whats selected and submit
+ $('select#selectStore').change(function () {
+                                $(this).parents('form:first').submit();
+                });
+
+
+ -- Go back 1:
+ onclick="history.go(-1);"
+ 
+ -- identify protocol then apply http or https
+ function() {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = (document.location.protocol == 'https:' ? 'https://static.getclicky.com/js' : 'http://static.getclicky.com/js');
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+        }
+
+-- JavaScript to identity
+ <script>
+if ("https:" == document.location.protocol) {
+    /* secure */
+	document.write('')
+} else {
+    /* unsecure */
+	document.write('<div id="sli_search" class="sli_search_container"> <!--search box starts here --> <form method="get" action="http://search.jigsaw24.com/search" name="searchform"> <input name="w" size="20" class="searchbox" type="text" id="keywords" autocomplete="off" placeholder="I’m searching for..."> <input type="hidden" name="asug" /> <input value="search" class="submitbutton" type="submit" id="search_btn"> </form> <!--search box ends here --> </div>')
+}
+</script>
+
+-- browser detetion
+if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+};
+
+-- click wait action delay:
+$("area.fancybox").click(
+    function() {
+        console.log("clicked...waiting...");
+
+        setTimeout(
+            function() {
+                console.log("show time...")
+                if (window.matchMedia('(min-width: 1200px)').matches) {
+                    $('iframe').contents().find('div.swiper-slide').css('min-height', '488px');
+                }
+            },
+            15000);
+        console.log("worked?...")
+    });
+
+-- js javascript For loop
+var cars = ["BMW", "Volvo", "Saab", "Ford"];
+var text = "";
+for (var i = 0; i<4; i++) {
+    text += cars[i] + "<br>";
+    ;
+}
+document.getElementById("demo").innerHTML = text;
+
+--  FAB-198 - Stop certain special characters being added
+
+-- 1st way
+$(document).ready(function() {
+    $('input').keyup(function() {
+        var v = $(this).val();
+        if (v.indexOf('℅') !== -1) {
+            v = v.substring(0, v.length - 1);
+            $(this).val(v);
+            $('.special_char').remove();
+            $(this).after('<span class="help-block p special_char" style="color:red;">You cannot enter special characters in this field</span>');
+            $('.special_char').fadeOut(5000);
+        }
+    });
+});
+
+-- 2nd way
+special = ',℅%';
+$(document).ready(function() {
+    $('input#firstName, input#firstnamefield, input#lastName, input#lastnamefield').bind('keypress',
+        function(event) {
+            var regex = new RegExp("^[a-zA-Z0-9]+$");
+
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (special.indexOf(key) !== -1) {
+                event.preventDefault();
+                $('.special_char').remove();
+                $(this).after('<span class="help-block p special_char" style="color:red;">You cannot enter special characters in this field</span>');
+                $('.special_char').fadeOut(5000);
+                return false;
+            }
+        })
+});
+
+-- 3rd better way of stop character being typed
+jQuery.validator.addMethod('specialCharacter', function (value, element) {
+	return !(/[\%\…\„\â\,\℅]/ig).test(value);
+}, 'No special characters allowed.');
+$(document).ready(function() {
+	$("#title, #firstName, #firstnamefield, #lastName, #lastnamefield").each(function(){
+		$(this).rules( "add", {
+			specialCharacter: true,
+			messages: {
+				specialCharacter: "You cannot enter special characters in this field"
+			}
+		});
+	});
+});
+
+-- If page has something like this on the page, hide something 
+if ("span.product_second:contains('Magazine Subscription')") {
+    $( ".quick_add_to_bag" ).hide();
+}
+
+-- hijacks the add to bag
+$('.form-add-to-bag').off().submit(function(e){
+                e.preventDefault();
+
+                $.post( "/pws/AJUpdateBasket.ice", $(this).serialize())
+                                .done(function(data) {
+                                                btf.basket.ssnAjaxBasket.ssnRequests(true);
+                                });
+});
+
+
+
+-- JavaScript to add marketing preference via AJAX
+--	=====================================================	--
+SET @who = 'AURORAUK-2839';
+SET @store_id = 8792;
+SET @name = 'Liverpool Flagship store';
+SET @addess_1 = '26 South John Street ';
+SET @addess_2 = 'Liverpool One ';
+SET @addess_3 = 'Leeds Trinity';
+SET @city = 'Liverpool ';
+SET @postcode = 'L1 8BJ';
+
+-- creates the store --
+INSERT IGNORE INTO `stores` (`id`,`name`,`address1`,`address2`,`address3`,`city`,`postcode`,`country`,`phone`,`ship_to_stores`,`shipping_zone_id`,`is_ship_to_store_enabled`,`created_dts`,`created_by`,`last_updated_dts`,`last_updated_by`,`web_store`)
+VALUES 
+(@store_id,@name,@addess_1,@addess_2,@addess_3,@city,@postcode,'GB',@phone,'F',1,'F',NOW(),@who,NOW(),@who,'F');
+
+-- inserts the stock location --
+INSERT IGNORE INTO stock_location
+(name,stock_location_type,import_pick_locations,created_dts,created_by,last_updated_dts,last_updated_by,sort_order)
+VALUES
+(@store_id,7,'F',now(),@who, now(),@who,999);
+
+-- creates the channel mapping --
+-- PWS --
+INSERT IGNORE  INTO store_stock_location_channel_mapping
+(store_id, stock_location_id, channel_id, priority, is_active, created_dts, created_by, last_updated_dts, last_updated_by)
+VALUES
+(@store_id, (SELECT id FROM stock_location WHERE name = @store_id), (SELECT id FROM channel WHERE name ='PWS'), 1, 'T', now(), @who, now(), @who),
+(@store_id, (SELECT id FROM stock_location WHERE name = @store_id), (SELECT id FROM channel WHERE name ='CC'), 1, 'T', now(), @who, now(), @who);
+
+
+-- Sitemap generator:
+SELECT
+	category_id,
+	layout,
+	last_updated_dts,
+	 EXTRACTVALUE(name,'/language//text[@xml:lang=\""+context.siteLanguage+"\"]') as name
+FROM category WHERE category_id LIKE 'wc_%';
+
+-- Is the store local
+SELECT id, name,web_store,is_ship_to_store_enabled,(((acos(sin((49.234*3.14/180)) * sin((latitude*3.14/180))+cos((49.234*3.14/180)) * cos((-2.0922*3.14/180)) * cos(((49.234- (-2.0922))*3.14/180))))*180/3.14)*60*1.1515) as distance FROM stores WHERE upper(is_ship_to_store_enabled) = 'T' AND upper(web_store) = 'F'  having distance <= 200;
+
+
+-- grep and
+--	=====================================================	--
+grep -E 'pattern1.*pattern2' filename
+or
+grep -E 'pattern1' filename | grep -E 'pattern2'
+
+
+-- Find errors in log
+more /usr/local/jboss402/server/GLTC/log/server.log | grep -i "Exception" -A 20 -B20
+
+-- css
+@keyframes rotation {
+    from {
+        transform: rotate(0)
+    }
+    to {
+        transform: rotate(359deg)
+
+
+-- Media queries 
+@media screen and (min-width: 769px) {
+    /* STYLES HERE */
+}
+
+@media screen and (min-device-width: 481px) and (max-device-width: 768px) {
+    /* STYLES HERE */
+}
+
+@media only screen and (max-device-width: 480px) {
+    /* STYLES HERE */
+}
+-- VELOCITY:
+-- IF:
+<!--Fix added in JTF-18-->
+#if($information.getRequestAttribute('currentLayout') =='loginregister.layout' || $information.getRequestAttribute('currentLayout') =='select.delivery.address.layout' || $information.getRequestAttribute('currentLayout') =='/secure/CheckOut.ice?checkout=true&secure_from=checkout' || $information.getRequestAttribute('currentLayout') =='select.delivery.options.layout' || $information.getRequestAttribute('currentLayout') =='select.billing.address.layout' || $information.getRequestAttribute('currentLayout') =='/secure/PaymentDetails.ice' || $information.getRequestAttribute('currentLayout') =='threedsecure.layout' || $information.getRequestAttribute('currentLayout') == '/Confirmation.ice')
+<!-- sli hidden -->
+#else
+<div id="sli_search" class="sli_search_container">
+	<!--search box starts here -->
+	<form method="get" action="http://search.jigsaw24.com/search" name="searchform">
+		<input name="w" size="20" class="searchbox" type="text" id="keywords" autocomplete="off" placeholder="I’m searching for...">
+		<input type="hidden" name="asug" />
+		<input value="search" class="submitbutton" type="submit" id="search_btn">
+	</form>
+	<!--search box ends here -->
+</div>
+#end
+
+-- Setting a variable and calling it:
+#set ($siteURL = "http://dev.j24.fresca.co.uk")
+
+<a href="$siteURL/?utm_source=service-emails&utm_medium=email&utm_campaign=wish-list" target="_blank" />
+
+-- IF
+#if($productTypeAttributeWP)
+#end
+
+-- get attribute value
+#set( $productTypeAttribute = ${information.getRequestAttribute("product").getAttribute("PRODUCT_TYPE").getValue()} )
+
+-- does it contain some thing/if it is present
+#set( $productTypeAttributeWP = $productTypeAttribute.contains("Wallpaper") )
+
+-- If not, the otput
+#if( !($ADDRESS_2 == ""))
+$!ADDRESS_2
+
+-- Pull sku level attribute
+#set($leadTime = "")
+#set($leadTime = $ORDER_ITEM.getProduct().getAttribute("lead_time_message").getValue())
+
+-- count show the last 5
+#set ($productCode = $imageCode.substring(0,$imageCode.length()-5))
+
+
+-- JSP
+-- Identify protocol
+                <c:set var="scheme" value="${header['x-forwarded-proto']}" />
+                <c:if test="${empty scheme}">
+                                <c:set var="sheme" value="http" />
+                </c:if>
+                <p>${scheme}://www.reallcooltshirts.com</p>
+
+-- To pull customer email:
+	${param.customerEmail}
+	
+-- output CMS
+<cms:content field="Main" pageKey="cms_leftnav" />
+
+or
+<cms:content var="showLefNav" field="CMS_LeftNav" pageKey="${pageKey}"/>
+<c:set var="showLefNav" value="${fn:toLowerCase(showLefNav)}" />
+${showLefNav}
+or
+<fcpUtil:cms pageKey="Home" var="cmsPage" scope="request" />
